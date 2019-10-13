@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<title>JWT Decoder</title>
 		<!-- Also at: https://codesandbox.io/s/jwt-decoder-qejue -->
 		<!-- <script src="https://cdn.jsdelivr.net/npm/jwt-decode@2.2.0/lib/index.min.js"></script> -->
 		<!-- <script src="https://raw.githubusercontent.com/auth0/jwt-decode/master/build/jwt-decode.min.js"></script> -->
@@ -10,42 +11,55 @@
 		</script>
 	</head>
 	<body>
-		<h3>JWT DECODER</h3>
-		<h5>Decode safely without sending the token to an external 3th party server.</h5>
-		<table style="width:100%">
-			<th width="70px"></th>
-			<tr>
-				<td>Token:</td>
-				<td>
-					<input type="text" id="txtToken" />
-				</td>
-			</tr>
-			<tr>
-				<td>
-				</td>
-				<td>
-					<button type="button" id="btnDecode">Decode</button>
-				</td>
-			</tr>
-			<tr>
-				<td>Decoded:</td>
-				<td><textarea id="txtDecoded" readonly></textarea></td>
-			</tr>
-		</table>
+		<h3 class="title">JWT DECODER</h3>
+		<h5 class="subtitle">Decode safely without sending the token to an external 3th party server.</h5>
+		<span>Token:</span>
+		<textarea id="txtToken"></textarea>
+		<button type="button" id="btnDecode">Decode</button>
+		<br/>
+		<span>Decoded:</span>
+		<textarea id="txtDecoded" readonly></textarea>
 	</body>
 </html>
 <style>
+body {
+	font-family: monospace;
+	background-color: #111;
+	color: chartreuse;
+}
+.title {
+	float: left;
+    margin: 0;
+    margin-right: 20px;
+	font-size: 20px;
+}
+.subtitle {
+	font-size: 12px;
+	margin: 0;
+	padding: 5px;
+}
+#txtToken {
+	height: 120px;
+}
 #txtDecoded {
-	height: 700px;
+	height: 500px;
 }
 #txtToken,
 #txtDecoded
 {
 	width: 100%;
+	background-color: #222;
+	color:chartreuse;
 }
-
+button {
+	background-color: #333;
+    color: chartreuse;
+}
 #btnDecode {
 	width: 300px;
+	margin: 0 auto;
+	text-align: center;
+	display: block;
 }
 
 .txt-console textarea,
@@ -62,7 +76,7 @@
 </style>
 <script>
 // VAINILLA JS:
-var token = "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImQ1ZDZkZWNjLWIwNGEtNDk4Zi1hYjYwLTY5ZmFhZmIzNTlmOCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJTcGFjZVRlc3QiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL2FjY2Vzc2NvbnRyb2xzZXJ2aWNlLzIwMTAvMDcvY2xhaW1zL2lkZW50aXR5cHJvdmlkZXIiOiJBU1AuTkVUIElkZW50aXR5IiwiQXNwTmV0LklkZW50aXR5LlNlY3VyaXR5U3RhbXAiOiIyMzk4ZGI3ZC0wNmFlLTQyOGYtYWE3MC0zZDJhY2UxYjlkNzEiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiRW5naW5lZXIiLCJBZG1pbiIsIk9wcyJdLCJQUk9HUkFNLlN0b3JlLkFsbCI6WyIxNTMiLCIxODYiLCIxNDEiLCIxNzEiLCIxNzMiLCIxNjMiLCIxNjgiXSwiQ1JFQVRFLlNlcnZpY2UuRU1TIjoiMTAwMDciLCJDUkVBVEUuU3BhY2UuQWxsIjoiMTAwMDciLCJuYmYiOjE1NjgzMDg5MjYsImV4cCI6MTU2ODM5NTMyNiwiaXNzIjoiaHR0cDovL2FwaS5kZXYuZnNuZXQubG9jYWwvc3BhY2UvdXNlcm1hbmFnZW1lbnQtc2VydmljZS92MS0wLTAiLCJhdWQiOiI0MTRlMTkyN2EzODg0ZjY4YWJjNzlmNzI4MzgzN2ZkMSJ9.9shzSmDELoEWJqltcGlXFm-I3NUycDYk2aWe9kN-VQo"
+var token = ""
 document.querySelector('#txtToken').value = token
 
 var errorClass = 'txt-error'
