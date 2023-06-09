@@ -3,11 +3,14 @@
 	<head>
 		<title>JWT Decoder</title>
 		<!-- Also at: https://codesandbox.io/s/jwt-decoder-qejue -->
-		<!-- <script src="https://cdn.jsdelivr.net/npm/jwt-decode@2.2.0/lib/index.min.js"></script> -->
+		<!-- <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script> -->
 		<!-- <script src="https://raw.githubusercontent.com/auth0/jwt-decode/master/build/jwt-decode.min.js"></script> -->
 		<script>
-		// https://raw.githubusercontent.com/auth0/jwt-decode/master/build/jwt-decode.min.js
-		!function a(b,c,d){function e(g,h){if(!c[g]){if(!b[g]){var i="function"==typeof require&&require;if(!h&&i)return i(g,!0);if(f)return f(g,!0);var j=new Error("Cannot find module '"+g+"'");throw j.code="MODULE_NOT_FOUND",j}var k=c[g]={exports:{}};b[g][0].call(k.exports,function(a){var c=b[g][1][a];return e(c?c:a)},k,k.exports,a,b,c,d)}return c[g].exports}for(var f="function"==typeof require&&require,g=0;g<d.length;g++)e(d[g]);return e}({1:[function(a,b,c){function d(a){this.message=a}function e(a){var b=String(a).replace(/=+$/,"");if(b.length%4==1)throw new d("'atob' failed: The string to be decoded is not correctly encoded.");for(var c,e,g=0,h=0,i="";e=b.charAt(h++);~e&&(c=g%4?64*c+e:e,g++%4)?i+=String.fromCharCode(255&c>>(-2*g&6)):0)e=f.indexOf(e);return i}var f="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";d.prototype=new Error,d.prototype.name="InvalidCharacterError",b.exports="undefined"!=typeof window&&window.atob&&window.atob.bind(window)||e},{}],2:[function(a,b,c){function d(a){return decodeURIComponent(e(a).replace(/(.)/g,function(a,b){var c=b.charCodeAt(0).toString(16).toUpperCase();return c.length<2&&(c="0"+c),"%"+c}))}var e=a("./atob");b.exports=function(a){var b=a.replace(/-/g,"+").replace(/_/g,"/");switch(b.length%4){case 0:break;case 2:b+="==";break;case 3:b+="=";break;default:throw"Illegal base64url string!"}try{return d(b)}catch(c){return e(b)}}},{"./atob":1}],3:[function(a,b,c){"use strict";function d(a){this.message=a}var e=a("./base64_url_decode");d.prototype=new Error,d.prototype.name="InvalidTokenError",b.exports=function(a,b){if("string"!=typeof a)throw new d("Invalid token specified");b=b||{};var c=b.header===!0?0:1;try{return JSON.parse(e(a.split(".")[c]))}catch(f){throw new d("Invalid token specified: "+f.message)}},b.exports.InvalidTokenError=d},{"./base64_url_decode":2}],4:[function(a,b,c){(function(b){var c=a("./lib/index");"function"==typeof b.window.define&&b.window.define.amd?b.window.define("jwt_decode",function(){return c}):b.window&&(b.window.jwt_decode=c)}).call(this,"undefined"!=typeof global?global:"undefined"!=typeof self?self:"undefined"!=typeof window?window:{})},{"./lib/index":3}]},{},[4]);
+		// https://www.npmjs.com/package/jwt-decode
+		// https://github.com/auth0/jwt-decode/blob/master/build/jwt-decode.js
+		// https://www.jsdelivr.com/package/npm/jwt-decode
+		// v3.1.2
+		!function(e){"function"==typeof define&&define.amd?define(e):e()}((function(){"use strict";function e(e){this.message=e}e.prototype=new Error,e.prototype.name="InvalidCharacterError";var n="undefined"!=typeof window&&window.atob&&window.atob.bind(window)||function(n){var t=String(n).replace(/=+$/,"");if(t.length%4==1)throw new e("'atob' failed: The string to be decoded is not correctly encoded.");for(var r,o,i=0,a=0,d="";o=t.charAt(a++);~o&&(r=i%4?64*r+o:o,i++%4)?d+=String.fromCharCode(255&r>>(-2*i&6)):0)o="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(o);return d};function t(e){var t=e.replace(/-/g,"+").replace(/_/g,"/");switch(t.length%4){case 0:break;case 2:t+="==";break;case 3:t+="=";break;default:throw"Illegal base64url string!"}try{return function(e){return decodeURIComponent(n(e).replace(/(.)/g,(function(e,n){var t=n.charCodeAt(0).toString(16).toUpperCase();return t.length<2&&(t="0"+t),"%"+t})))}(t)}catch(e){return n(t)}}function r(e){this.message=e}function o(e,n){if("string"!=typeof e)throw new r("Invalid token specified");var o=!0===(n=n||{}).header?0:1;try{return JSON.parse(t(e.split(".")[o]))}catch(e){throw new r("Invalid token specified: "+e.message)}}r.prototype=new Error,r.prototype.name="InvalidTokenError",window&&("function"==typeof window.define&&window.define.amd?window.define("jwt_decode",(function(){return o})):window&&(window.jwt_decode=o))}));
 		</script>
 	</head>
 	<body>
@@ -21,11 +24,13 @@
 			</a>
 		</div>
 		<span>Token:</span>
-		<textarea id="txtToken"></textarea>
+		<textarea id="txtToken" oninput='setAutoHeight(this)'></textarea>
 		<button type="button" id="btnDecode">Decode</button>
 		<br/>
-		<span>Decoded:</span>
-		<textarea id="txtDecoded" readonly></textarea>
+		<span>Decoded Header:</span>
+		<textarea id="txtDecodedHeader" readonly></textarea>
+		<span>Decoded Payload:</span>
+		<textarea id="txtDecodedPayload" readonly></textarea>
 	</body>
 </html>
 <style>
@@ -48,7 +53,6 @@ textarea {
 	border: 0;
 }
 
-
 /* Layout */
 .title {
 	float: left;
@@ -70,11 +74,9 @@ textarea {
 #txtToken {
 	height: 120px;
 }
-#txtDecoded {
-	height: 500px;
-}
-#txtToken,
-#txtDecoded
+#txtDecodedPayload,
+#txtDecodedHeader,
+#txtToken
 {
 	width: 100%;
 }
@@ -102,23 +104,35 @@ textarea {
 // VAINILLA JS:
 var token = ""
 document.querySelector('#txtToken').value = token
-
 var errorClass = 'txt-error'
-document.querySelector('#btnDecode').onclick = function() {
-	var txtToken = document.querySelector('#txtToken')
-	var txtDecoded = document.querySelector('#txtDecoded')
+
+function decodeJwt(txtId, header = false) {
+	var txtDecoded = document.querySelector('#'+txtId)
 	var token = txtToken.value
-	txtToken.classList.remove(errorClass)
+	//txtToken.classList.remove(errorClass)
 	txtDecoded.classList.remove(errorClass)
-	var decoded = ''
+	var decoded = null
 	try {
-		decoded = jwt_decode(token)
+		decoded = jwt_decode(token, { header: header })
 	} catch(ex) {
 		txtDecoded.classList.add(errorClass)
-		txtToken.classList.add(errorClass)
+		//txtToken.classList.add(errorClass)
 		// alert('Can not decode token:\r\n' + token)
+		decoded = "ERROR DECODING: " + ex
 	}
 	console.log(decoded)
 	txtDecoded.value = JSON.stringify(decoded, null, 2)
+	setAutoHeight(txtDecoded)
+}
+
+document.querySelector('#btnDecode').onclick = function() {
+	var txtToken = document.querySelector('#txtToken')
+	decodeJwt('txtDecodedHeader', true)
+	decodeJwt('txtDecodedPayload', false)
+}
+
+function setAutoHeight(txtElement) {
+	txtElement.style.height = ""
+	txtElement.style.height = txtElement.scrollHeight + "px"
 }
 </script>
